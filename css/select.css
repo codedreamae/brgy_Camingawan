@@ -1,0 +1,21 @@
+.input-group {
+    display: flex;
+    align-items: center; /* Align items vertically centered */
+    justify-content: space-between; /* Space between the select and button */
+    gap: 10px; /* Optional: Add space between select and button */
+}
+
+.input-group select {
+    height: 35px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: auto; /* Adjust width as needed */
+}
+
+.input-group button {
+    border-radius: 5px;
+    width: 20%; /* Adjust width as needed */
+    padding: 5px 10px; /* Optional: Add padding for better appearance */
+    height: 35px;
+    margin-top: 5px;
+}

@@ -1,0 +1,11 @@
+
+.text-muted {
+    text-align: center;
+
+    margin-top: 50px;
+}
+.message-error, .message-success {
+    text-align: center;
+ 
+    margin-top:  50px;
+}
