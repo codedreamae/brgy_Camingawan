@@ -1,13 +1,14 @@
 <?php
 include 'connection.php';
-include 'auth.php';
 
-$userId = $_SESSION['user_id']; // Assuming session stores logged-in user ID
+// Fetch unread notifications
 
-$sql = $conn->prepare("SELECT * FROM unotif WHERE user_id = :user_id AND status = 'unread' ORDER BY created_at DESC");
-$sql->bindParam(':user_id', $userId, PDO::PARAM_INT);
-$sql->execute();
-$notifications = $sql->fetchAll(PDO::FETCH_ASSOC);
+$sql = "SELECT * FROM unotif INNER JOIN users ON unotif.user_id = users.id WHERE status = 'unread' ORDER BY created_at DESC";
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+$notifications = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-echo json_encode($notifications);
+$response = ['count' => count($notifications), 'notifications' => $notifications];
+
+echo json_encode($response);
 ?>

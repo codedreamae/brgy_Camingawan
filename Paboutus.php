@@ -235,18 +235,20 @@ if ($row) {
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-5">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="upep.php">Home</a>
+          <a class="nav-link active" aria-current="page" href="purokredent.php">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="aboutus.php">About Us</a>
+          <a class="nav-link active" href="lead.php">Resident</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="services.php">Services</a>
+          <a class="nav-link active" href="Paboutus.php">About Us</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="contacts.php">Contacts</a>
+          <a class="nav-link active" href="Pservices.php">Services</a>
         </li>
-      
+        <li class="nav-item">
+          <a class="nav-link active" href="Pcontacts.php">Contacts</a>
+        </li>
         <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
         <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo htmlspecialchars($name); ?></span>
@@ -323,10 +325,10 @@ if ($row) {
         <div class="footer-content">
             <h3>Quick Links</h3>
             <ul class="list">
-                <li><a href="index.php">Home</a></li>
-                <li><a href="aboutus.php">About</a></li>
-                <li><a href="services.php">Services</a></li>
-                <li><a href="contacts.php">Contact</a></li>
+                <li><a href="purokredent.php">Home</a></li>
+                <li><a href="Paboutus.php">About</a></li>
+                <li><a href="Pservices.php">Services</a></li>
+                <li><a href="Pcontacts.php">Contact</a></li>
             </ul>
         </div>
         <div class="footer-content">

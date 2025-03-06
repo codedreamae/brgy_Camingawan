@@ -40,84 +40,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Form</title>
     <link href="img/logo2.png" rel="icon">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="css/adduser.css" />
     <link rel="stylesheet" href="css/select.css" />
     <link rel="stylesheet" href="css/text.css" />
+    <link rel="stylesheet" href="css/it.css" />
     <script src="js/bootstrap.bundle.js"></script>
-<style>
- body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background-color: #fff;
-            padding: 2em;
-            box-shadow: 0 0 50px rgba(37, 110, 238, 0.77);
-            border-radius: 8px;
-            width: 100%;
-            max-width: 400px;
-        }
-        .logo img {
-            display: block;
-            margin: 0 auto;
-        }
-        #login-wrapper {
-            text-align: center;
-        }
-        .input-group {
-            position: relative;
-            margin-bottom: 1em; 
-            margin-top: 10px;
-        }
-        .input-group input {
-            width: 100%;
-            padding: 0.5em; /* Adjusted padding */
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-           
-        }
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 0.5em;
-            background-color: #28a745;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .btn:hover {
-            background-color: #218838;
-        }
-        .message-error, .message-success {
-            color: #ff0000;
-            margin-bottom: 1em;
-        }
-        .message-success {
-            color: #28a745;
-        }
-        .additional-options {
-            margin-top: 1em;
-        }
-        .additional-options a {
-            color: #007bff;
-            text-decoration: none;
-        }
-        .additional-options a:hover {
-            text-decoration: underline;
-        }
-     
-</style>
-   
+ 
 </head>
 <body>
 <div class="container">
@@ -141,25 +72,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php endif; ?>
 
         <form class="login-form" method="POST" action="">
-            <div class="input-group">
+            <div class="input-group" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-placement="right" title="Isulat ang imo bug-os nga Ngalan">
                 <input type="text" placeholder="Fullname" name="name" required> 
                 <i class="fas fa-user"></i>
             </div>
-            <div class="input-group">
+            <div class="input-group" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-placement="right" title="Isulat ang imo Email">
                 <input type="Email" placeholder="Email" name="email" required>
                 <i class="fas fa-envelope"></i>
             </div>
-            <div class="input-group">
+            <div class="input-group" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-placement="right" title="Isulat ang imo Password">
     <input type="password" id="password" placeholder="Password" name="password" required>
    <i class="fa-solid fa-eye-slash" id="togglePassword"></i> 
 </div>
-            <div class="input-group">
+            <div class="input-group" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-placement="right" title="Pili ka sang imo Role">
                 <select name="role">
                     <option value="admin">Admin</option>
                     <option value="leader">Purok Leader</option>
                     <option value="member">Member</option>
                 </select>
-                <button type="submit" value="Register">Save</button>
+                <button type="submit" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" data-bs-placement="right" title="Palihog save sang imo impromasyon" value="Register">Save</button>
                 
             </div>
         </form>

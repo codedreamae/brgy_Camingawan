@@ -97,12 +97,6 @@ include 'connection.php';
               </a>
             </li>
             <li class="nav-item mt-2">
-              <a href="document.php" class="nav-link">
-                <i class="nav-icon fas fa-file fs-4"></i>
-                <p class="fs-5 ms-3">Documents</p>
-              </a>
-            </li>
-            <li class="nav-item mt-2">
               <a href="#" class="nav-link">
               <i class="nav-icon fas fa-file fs-4"></i>
               <p class="fs-5 ms-3">

@@ -2,13 +2,14 @@
 include 'connection.php';
 include 'auth.php';
 
-
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') { // Use !== for strict comparison
     header('Location: login.php');
     exit;
 }
-
 ?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,6 +51,28 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
   <?php echo $current_time; ?>
   -->
   <div class="wrapper">
+
+  <!-- <?php 
+// Fetch the current user's name and email based on user_id in the session
+$user_id = $_SESSION['user_id']; // Assuming user_id is stored in session after login
+$sql = "SELECT name, email FROM users WHERE id = :user_id LIMIT 1";
+$stmt = $conn->prepare($sql);
+$stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+$stmt->execute();
+
+// Fetch the user data
+$row = $stmt->fetch();
+
+// Check if a user is found
+if ($row) {
+    $name = $row['name'];
+    $email = $row['email'];
+} else {
+    // Handle case if no user is found (e.g., user is not logged in or invalid user)
+    $name = 'Guest';
+    $email = 'Not available';
+}
+?> -->
     <!-- Navbar -->
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">
       <ul class="navbar-nav">
@@ -58,7 +81,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
         </li>
 
         
-      <li class="nav-item dropdown">
+      <li class="nav-item dropdown" data-bs-toggle="tooltip" data-bs-target="custom-tooltip" data-bs-placement="right" title="Mga Notipikasyon">
     <a class="nav-link" id="notification-btn" role="button" data-bs-toggle="dropdown" aria-expanded="false">
         <i class="fas fa-bell"></i>
         <span class="badge badge-warning navbar-badge" id="notif-count">0</span>
@@ -71,11 +94,29 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
 </li>
       </ul>
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link btn btn-primary text-white" href="logout.php" role="button">
-            <span>Logout</span>
-          </a>
+       
+      <li class="nav-item dropdown" data-bs-toggle="tooltip" data-bs-target="custom-tooltip" data-bs-placement="right" title="Pagdumala sang Profile">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo htmlspecialchars($name); ?></span>
+        <img class="img-profile rounded-circle" src="img/pro.png" width="30" height="30">
+    </a>
+    
+    <ul class="dropdown-menu dropdown-menu-end">
+        <li class="dropdown-item">Profile</li>
+        <li>
+            <a class="dropdown-item">
+                <i class="fas fa-envelope fa-sm fa-fw mr-2 text-gray-400"></i>
+                <u style="color: blue;"><?php echo htmlspecialchars($email); ?></u>
+            </a>
         </li>
+        <li>
+       
+        <li><a class="dropdown-item" href="logout.php">
+            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+            <span>Logout</span>
+        </a></li>
+    </ul>
+</li>
       </ul>
     </nav>
     <!-- /.navbar -->
@@ -166,36 +207,36 @@ $(document).ready(function () {
         <nav class="mt-2">
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <li class="nav-item">
-              <a href="dashboard.php" class="nav-link">
+              <a href="dashboard.php" class="nav-link" data-bs-toggle="tooltip" data-bs-target="custom-tooltip" data-bs-placement="right" title="Ang Dashboard">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p class="fs-5 ms-4">Dashboard</p>
               </a>
             </li>
             <li class="nav-item mt-2">
-              <a href="household.php" class="nav-link">
+              <a href="household.php" class="nav-link" data-bs-toggle="tooltip" data-bs-target="custom-tooltip" data-bs-placement="right" title="Ang mga Panimalay">
                 <i class="nav-icon fas fa-home fs-4"></i>
                 <p class="fs-5 ms-3">Household</p>
               </a>
             </li>
             <li class="nav-item mt-2">
-              <a href="resident.php" class="nav-link">
+              <a href="resident.php" class="nav-link" data-bs-toggle="tooltip" data-bs-target="custom-tooltip" data-bs-placement="right" title="Ang mga Residente">
                 <i class="nav-icon fas fa-users fs-4"></i>
                 <p class="fs-5 ms-3">Resident</p>
               </a>
             </li>
-            <li class="nav-item mt-2">
+            <li class="nav-item mt-2" data-bs-toggle="tooltip" data-bs-target="custom-tooltip" data-bs-placement="right" title="Ang mga Blotter">
               <a href="blotter.php" class="nav-link">
                 <i class="nav-icon fas fa-user fs-4"></i>
                 <p class="fs-5 ms-3">Blotter</p>
               </a>
             </li>
             <li class="nav-item mt-2">
-              <a href="purok.php" class="nav-link">
+              <a href="purok.php" class="nav-link" data-bs-toggle="tooltip" data-bs-target="custom-tooltip" data-bs-placement="right" title="Ang mga Purok">
                 <i class="nav-icon fa-solid fa-signs-post fs-4"></i>
                 <p class="fs-5 ms-3">Purok</p>
               </a>
             </li>
-            <li class="nav-item mt-2">
+            <li class="nav-item mt-2" data-bs-toggle="tooltip" data-bs-target="custom-tooltip" data-bs-placement="right" title="Ang mga Dokumento">
               <a href="#" class="nav-link">
               <i class="nav-icon fas fa-file fs-4"></i>
               <p class="fs-5 ms-3">
@@ -203,7 +244,7 @@ $(document).ready(function () {
                 <i class="right fas fa-angle-left"></i>
               </p>
               </a>
-              <ul class="nav nav-treeview">
+              <ul class="nav nav-treeview" data-bs-toggle="tooltip" data-bs-target="custom-tooltip" data-bs-placement="right" title="Ang mga Sertipiko">
               <li class="nav-item">
                 <a href="document.php" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
@@ -211,7 +252,7 @@ $(document).ready(function () {
                 </a>
               </li>
               <li class="nav-item">
-                <a href="app.php" class="nav-link">
+                <a href="app.php" class="nav-link" data-bs-toggle="tooltip" data-bs-target="custom-tooltip" data-bs-placement="right" title="Ang mga Appointments">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Appointment</p>
                 </a>
@@ -219,19 +260,19 @@ $(document).ready(function () {
               </ul>
             </li>
             <li class="nav-item mt-2">
-              <a href="report.php" class="nav-link">
+              <a href="report.php" class="nav-link" data-bs-toggle="tooltip" data-bs-target="custom-tooltip" data-bs-placement="right" title="Ang mga Reports">
                 <i class="nav-icon fas fa-file fs-4"></i>
                 <p class="fs-5 ms-3">Reports</p>
               </a>
             </li>
             <li class="nav-item mt-2">
-              <a href="purAcc.php" class="nav-link">
+              <a href="purAcc.php" class="nav-link" data-bs-toggle="tooltip" data-bs-target="custom-tooltip" data-bs-placement="right" title="kumpirmasyon sang Opisyal nga pag-access">
                 <i class="nav-icon fa-solid fa-unlock fs-4"></i>
                 <p class="fs-5 ms-3">Officials Access</p>
               </a>
             </li>
             <li class="nav-item mt-2">
-              <a href="official.php" class="nav-link">
+              <a href="official.php" class="nav-link" data-bs-toggle="tooltip" data-bs-target="custom-tooltip" data-bs-placement="right" title="Ang mga Opisyal sang Barangay">
                 <i class="nav-icon fas fa-users fs-4"></i>
                 <p class="fs-5 ms-3">Barangay Officials</p>
               </a>
@@ -260,7 +301,7 @@ $(document).ready(function () {
         <div class="container-fluid">
           <div class="row">
             <div class="col-lg-3 col-6">
-              <div class="small-box bg-info">
+              <div class="small-box bg-info" data-bs-toggle="tooltip" data-bs-target="custom-tooltip" data-bs-placement="right" title="Kabilugan nga mga Panimalay">
                 <div class="inner" id="houbox">
                   <h5 class="mt-3"><i class="nav-icon fas fa-home fs-3"></i>
                     <span class="ms-2"><b>TOTAL HOUSEHOLD</b></span>
@@ -303,7 +344,7 @@ $(document).ready(function () {
 </script>
            
             <div class="col-lg-3 col-6">
-              <div class="small-box bg-success">
+              <div class="small-box bg-success" data-bs-toggle="tooltip" data-bs-target="custom-tooltip" data-bs-placement="right" title="Kabilugan nga mga Residente">
                 <div class="inner" id="rebox">
                   <h4 class="mt-3"><i class="fa fa-users fs-3"></i>
                     <span class="ms-2">TOTAL RESIDENT</span>
@@ -346,7 +387,7 @@ $(document).ready(function () {
 </script>
         
             <div class="col-lg-3 col-6">
-              <div class="small-box bg-secondary">
+              <div class="small-box bg-secondary" data-bs-toggle="tooltip" data-bs-target="custom-tooltip" data-bs-placement="right" title="Kabilugan nga mga Blotter">
                 <div class="inner" id="blobox">
                   <h4 class="mt-3"><i class="fa fa-user fs-3"></i>
                     <span class="ms-2">TOTAL BLOTTER</span>
@@ -388,7 +429,7 @@ $(document).ready(function () {
     });
 </script>
             <div class="col-lg-3 col-6">
-              <div class="small-box bg-danger">
+              <div class="small-box bg-danger" data-bs-toggle="tooltip" data-bs-target="custom-tooltip" data-bs-placement="right" title="Kabilugan nga mga Purok">
                 <div class="inner" id="purbox">
                   <h4 class="mt-3 text-white">
                     <i class="fa-solid fa-signs-post"></i>

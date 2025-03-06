@@ -2,6 +2,14 @@
 include 'connection.php';
 include 'auth.php';
 
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'member') { // Fixed condition
+    header('Location: login.php');
+    exit;
+}
+
+
+
+
 // Function to add notification
 function addNotification($user_id, $message, $conn) {
     $sql = "INSERT INTO notifications (user_id, message) VALUES (?, ?)";
@@ -45,55 +53,183 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="img/logo2.png" rel="icon">
     <title>BARANGAY CAMINGAWAN</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="ui.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   
-    
+    <style>
+        .notification-container { position: relative; display: inline-block; }
+        .bell-icon { font-size: 24px; cursor: pointer; position: relative; }
+        .badge { position: absolute; top: -5px; right: -5px; background: red; color: white; padding: 5px 10px; border-radius: 50%; font-size: 12px; display: none; }
+        .notification-dropdown { display: none; position: absolute; top: 30px; right: 0; background: white; border: 1px solid #ccc; width: 250px; max-height: 300px; overflow-y: auto; box-shadow: 0 0 10px rgba(0,0,0,0.2); }
+        .notification-dropdown ul { list-style: none; padding: 0; margin: 0; }
+        .notification-dropdown li { padding: 10px; border-bottom: 1px solid #ddd; }
+        .notification-dropdown li:hover { background: #f5f5f5; cursor: pointer; }
+    </style>
   </head>
 <body>
 <nav class="navbar sticky-navbar navbar-expand-lg navbar-dark bg-secondary py-1">
-  <div class="container">
+  <div class="container-fluid">
     <!-- Logo -->
-    <a class="navbar-brand mx-5" href="#">
+    <a class="navbar-brand ms-5" href="#">
       <img src="img/logo2.png" alt="Logo" width="80" height="70">
     </a>
-    <!-- Navbar Toggler 
+    
+    <!-- Toggler/collapsibe Button -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
-    </button>-->
+    </button>
+
+    <?php 
+// Fetch the current user's name and email based on user_id in the session
+$user_id = $_SESSION['user_id']; // Assuming user_id is stored in session after login
+$sql = "SELECT name, email, purok FROM users WHERE id = :user_id LIMIT 1";
+$stmt = $conn->prepare($sql);
+$stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+$stmt->execute();
+
+// Fetch the user data
+$row = $stmt->fetch();
+
+// Check if a user is found
+if ($row) {
+    $name = $row['name'];
+    $email = $row['email'];
+    $purok = $row['purok'];
+} else {
+    // Handle case if no user is found (e.g., user is not logged in or invalid user)
+    $name = 'Guest';
+    $email = 'Not available';
+    $purok = 'Not available';
+}
+?>
+
     <!-- Navbar Links -->
-    <div class="collapse navbar-collapse">
-      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-5">
+      <li class="nav-item dropdown"  data-bs-toggle="tooltip" data-bs-target="custom-tooltip" data-bs-placement="right" title="Mga Notipikasyon">
+       <a class="nav-link" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <div class="notification-container position-relative">
+            <i class="fa fa-bell bell-icon"></i>
+            <span class="badge bg-danger position-absolute top-0 start-100 translate-middle" id="notification-count">0</span>
+        </div>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end p-2" aria-labelledby="notificationDropdown" id="notification-dropdown">
+        <li><h6 class="dropdown-header">Notifications</h6></li>
+        <ul id="notification-list" class="list-unstyled mb-0"></ul>
+    </ul>
+</li>
+
+<script>
+function fetchNotifications() {
+    $.ajax({
+        url: 'notifications.php',
+        method: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            console.log(response); // Debugging
+
+            $("#notification-list").empty();
+            $("#notification-count").text(response.count).toggle(response.count > 0);
+
+            if (response.count > 0) {
+                response.notifications.forEach(notification => {
+                    $("#notification-list").append(`
+                        <li class="dropdown-item d-flex justify-content-between align-items-center">
+                            <span>${notification.message}</span>
+                            <button class="btn btn-sm btn-outline-danger mark-as-read" data-id="${notification.id}">X</button>
+                        </li>
+                    `);
+                });
+            } else {
+                $("#notification-list").html('<li class="dropdown-item text-muted">No new notifications</li>');
+            }
+        }
+    });
+}
+
+ // Close notification when button is clicked
+ $(document).on('click', '.mark-as-read', function () {
+        let notificationId = $(this).data('id');
+        let notifItem = $(this).parent();
+
+        $.ajax({
+            url: 'delete_notif.php',
+            type: 'POST',
+            data: { notification_id: notificationId },
+            success: function (response) {
+                notifItem.fadeOut(300, function () {
+                    $(this).remove();
+                    fetchNotifications();
+                });
+            }
+        });
+    });
+
+// Handle click event for dynamically added buttons
+$(document).on("click", ".mark-as-read", function () {
+    let notifId = $(this).data("id");
+    markAsRead(notifId);
+});
+
+function markAsRead(notifId) {
+    $.ajax({
+        url: 'mark_notification_read.php',
+        method: 'POST',
+        data: { id: notifId },
+        success: function () {
+            fetchNotifications(); // Refresh notifications
+        }
+    });
+}
+
+// Fetch notifications every 5 seconds
+setInterval(fetchNotifications, 5000);
+fetchNotifications();
+
+</script>
+
+
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="upep.php">Home</a>
+          <a class="nav-link active" data-bs-toggle="tooltip" data-bs-target="custom-tooltip" data-bs-placement="right" title="Home Page" aria-current="page" href="upep.php">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="aboutus.php">About Us</a>
+          <a class="nav-link active" data-bs-toggle="tooltip" data-bs-target="custom-tooltip" data-bs-placement="right" title="Parte sa Amon" href="aboutus.php">About Us</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="services.php">Services</a>
+          <a class="nav-link active" data-bs-toggle="tooltip" data-bs-target="custom-tooltip" data-bs-placement="right" title="Mga Serbisyo" href="services.php">Services</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="contacts.php">Contacts</a>
+          <a class="nav-link active" data-bs-toggle="tooltip" data-bs-target="custom-tooltip" data-bs-placement="right" title="Tan-awa ang mga Kontak" href="contacts.php">Contacts</a>
         </li>
-        <li class="nav-item">
-        <a class="nav-link text-white" href="logout.php" role="button">
-          <span>Logout</span>
-        </a>
-      </li>
-      <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown link
-          </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
+      
+        <li class="nav-item dropdown" data-bs-toggle="tooltip" data-bs-target="custom-tooltip" data-bs-placement="right" title="Pagdumala sang Profile">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo htmlspecialchars($name); ?></span>
+        <img class="img-profile rounded-circle" src="img/pro.png" width="30" height="30">
+    </a>
+    
+    <ul class="dropdown-menu dropdown-menu-end">
+        <li class="dropdown-item">Profile</li>
+        <li>
+            <a class="dropdown-item">
+                <i class="fas fa-envelope fa-sm fa-fw mr-2 text-gray-400"></i>
+                <u style="color: blue;"><?php echo htmlspecialchars($email); ?></u>
+            </a>
         </li>
+        <li><a class="dropdown-item">
+                <i class=" fa-solid fa-signs-post fa-sm fa-fw mr-2 text-gray-400"></i>
+                <i><b> PUROK <?php echo htmlspecialchars($purok); ?> BRGY. CAMINGAWAN, <br> KABANKALAN CITY, NEG. OCC.</b></i>
+            </a></li>
+        <li><a class="dropdown-item" href="logout.php">
+            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+            <span>Logout</span>
+        </a></li>
+    </ul>
+</li>
       </ul>
     </div>
   </div>
@@ -200,7 +336,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <option value="Residency">Residency Certificate</option>
           <option value="Indigency">Indigency Certificate</option>
           <option value="Business Permit">Business Permit</option>
-          <option value="Summon Report">Summon</option>
+          <option value="Summon">Summon</option>
         </select>
       </div>
       <div class="form-group">
@@ -232,7 +368,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <textarea class="form-control"  name="remark" rows="2"></textarea>
       </div>
       <div class="text-center mt-3">
-        <button type="submit" class="btn btn-primary" name="appoint">Submit</button>
+        <button type="submit" data-bs-toggle="tooltip" data-bs-target="custom-tooltip" data-bs-placement="right" title="Palihog sumite sang imo impromasyon" class="btn btn-primary" name="appoint">Submit</button>
       </div>
     </form>
   </div>
@@ -273,7 +409,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="footer-content">
       <h3>Quick Links</h3>
       <ul class="list">
-        <li><a href="index.php">Home</a></li>
+        <li><a href="upep.php">Home</a></li>
         <li><a href="aboutus.php">About</a></li>
         <li><a href="services.php">Services</a></li>
         <li><a href="contacts.php">Contact</a></li>

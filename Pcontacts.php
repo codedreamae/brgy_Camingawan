@@ -2,6 +2,7 @@
 include 'connection.php';
 include 'auth.php';
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,83 +49,135 @@ include 'auth.php';
   z-index: 1030; 
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
 }
-/* about */
-#about {
+/* contact */
+.contact {
+  width: 100%;
+  background: #f7f5f2;
+  padding-top: 70px;
+  padding-bottom: 70px; /* Added padding-bottom for spacing */
+}
+
+.contact .container {
+  width: 100%;
+  background: white;
+  background: linear-gradient(90deg, white 80%, #b2744c 20%);
+  border-radius: 10px;
+  display: flex;
+  flex-wrap: wrap; /* Added flex-wrap for responsiveness */
+  align-items: center; /* Center items vertically */
+  justify-content: space-between; /* Add spacing between items */
+  padding: 20px; /* Added padding for inner spacing */
+}
+
+.heading6 {
+  font-size: 30px;
+  font-weight: bold;
+  margin-top: 70px;
+  text-align: center;
+}
+
+.heading6 span {
+  color: #b2744c;
+}
+
+.contact p {
+  font-weight: bold;
+  font-size: 13px;
+  color: black;
+}
+
+.contact input {
+  width: 100%;
+  max-width: 360px; /* Added max-width for larger screens */
+  border: none;
+  border-bottom: 1px solid;
+  margin-bottom: 10px; /* Added margin-bottom for spacing */
+}
+
+#contact-btn {
+  width: 200px;
+  height: 36px;
+  border: none;
+  background: #b2744c;
+  color: white;
+  font-weight: bold;
+  margin-top: 30px;
+  cursor: pointer;
+}
+
+#col {
+  width: 40%;
+  background: black;
+  padding: 20px; /* Added padding for inner spacing */
+  margin-top: 78px;
+  border-radius: 10px; /* Added border-radius for consistent styling */
+}
+
+.contact h1 {
+  color: white;
+  font-size: 25px;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.contact #col p {
+  font-size: 15px;
+  color: white;
+  margin-left: 13px;
+  padding-top: 30px;
+}
+
+@media screen and (max-width: 766px) {
+  .contact .container {
+    background: white;
+    flex-direction: column-reverse; /* Stack items vertically on smaller screens */
+  }
+  
+  #col {
     width: 100%;
-    padding: 50px 0;
-    background: #f7f5f2;
-    font-family: 'Roboto', sans-serif;
+    background: #000000;
+    margin-top: 20px; /* Adjusted margin for spacing */
   }
-  .container {
-    width: 80%;
-    margin: 0 auto;
-    overflow: hidden; /* Prevents content from overflowing on small screens */
+  
+  .contact {
+    padding-top: 30px;
+    padding-bottom: 30px;
   }
-  .heading {
-    text-align: center;
-    margin-bottom: 25px;
-    color: black;
-    font-size: 30px;
-    font-weight: bold;
+}
+
+@media screen and (max-width: 400px) {
+  .contact input {
+    width: 100%; /* Make input take full width */
   }
-  .heading span {
-    color: #b2744c;
-  }
-  .card {
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Adding a subtle shadow for depth */
-  }
-  .card img {
-    width: 100%; /* Ensures the image fills the card */
-    height: 67vh; /* Allows the image to adjust its height proportionally */
-    display: block;
-  }
-  @media screen and (max-width: 992px) {
-    .container {
-      width: 90%;
-    }
-  }
-  @media screen and (max-width: 768px) {
-    .row {
-      flex-direction: column;
-    }
-    .col-md-5 {
-      width: 100%;
-      margin-bottom: 20px;
-    }
-    .col-md-7 {
-      width: 100%;
-    }
-  }
-/* About us */
+}
+/* contacts */
 /* footer */
 footer {
   background: #343434;
-  padding: 10px 0; /* Reduce overall padding */
-  color: white;
-  font-size: 12px; /* Reduce font size */
+  padding-top: 20px;
+  color: white; /* Ensure text is visible on dark background */
+  font-size: 14px; /* Reduce overall font size */
 }
 .con {
-  max-width: 600px; /* Further reduce maximum width */
+  max-width: 800px; /* Reduce maximum width */
   margin: auto;
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap;
-  padding: 0 5px; /* Minimize padding for smaller design */
+  flex-wrap: wrap; /* Allow flex items to wrap on smaller screens */
+  padding: 0 10px; /* Add padding for smaller screens */
 }
 .footer-content {
-  flex: 1 1 120px; /* Adjust minimum width */
-  margin-bottom: 8px; /* Reduce spacing between items */
-  text-align: center;
+  flex: 1 1 150px; /* Allow flex items to grow and shrink, with a minimum width */
+  margin-bottom: 10px; /* Add margin for spacing between items */
+  text-align: center; /* Center text for smaller screens */
 }
 .footer-content h3 {
-  font-size: 14px; /* Reduce font size of headings */
-  margin-bottom: 8px;
+  font-size: 16px; /* Reduce font size of headings */
+  margin-bottom: 10px;
 }
 .footer-content p, .footer-content ul {
   margin: auto;
-  padding: 3px;
+  padding: 5px;
   text-align: center;
 }
 .footer-content ul {
@@ -135,7 +188,7 @@ footer {
 }
 .list li {
   list-style-type: none;
-  padding: 3px; /* Reduce padding for list items */
+  padding: 5px;
   position: relative;
   text-align: center;
 }
@@ -148,10 +201,10 @@ footer {
   width: 0;
   height: 2px;
   background: #f18930;
-  transition-duration: 0.3s; /* Speed up animation */
+  transition-duration: .5s;
 }
 .list li:hover::before {
-  width: 40px; /* Reduce width of hover effect */
+  width: 50px;
 }
 .social-icons {
   text-align: center;
@@ -159,15 +212,15 @@ footer {
 }
 .social-icons li {
   display: inline-block;
-  padding: 2px; /* Reduce padding for icons */
+  padding: 3px;
 }
 .social-icons i {
   color: white;
-  font-size: 16px; /* Reduce icon size */
+  font-size: 18px; /* Reduce font size of icons */
 }
 a {
   text-decoration: none;
-  color: inherit;
+  color: inherit; /* Ensure links inherit color */
 }
 a:hover, .social-icons i:hover {
   color: #f18930;
@@ -175,25 +228,24 @@ a:hover, .social-icons i:hover {
 .bottom-bar {
   background: #f18930;
   text-align: center;
-  padding: 3px 0; /* Minimize padding */
-  margin-top: 10px; /* Reduce margin-top */
+  padding: 5px 0; /* Reduce padding */
+  margin-top: 20px; /* Reduce margin-top */
 }
 .bottom-bar p {
   color: #343434;
   margin: 0;
-  font-size: 10px; /* Further reduce font size */
-  padding: 3px;
+  font-size: 12px; /* Reduce font size */
+  padding: 5px;
 }
 @media screen and (max-width: 767px) {
   .footer-content {
-      flex: 1 1 100%; /* Each content takes full width on small screens */
+      flex: 1 1 100%; /* Make each footer content take full width on small screens */
   }
   .container {
-      flex-direction: column;
-      align-items: center;
+      flex-direction: column; /* Stack items vertically on small screens */
+      align-items: center; /* Center items on small screens */
   }
 }
-/* footer */
 </style>
 <body>
 <nav class="navbar sticky-navbar navbar-expand-lg navbar-dark bg-secondary py-1">
@@ -235,24 +287,22 @@ if ($row) {
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-5">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="upep.php">Home</a>
+          <a class="nav-link active" aria-current="page" href="purokredent.php">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="aboutus.php">About Us</a>
+          <a class="nav-link active" href="Paboutus.php">About Us</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="services.php">Services</a>
+          <a class="nav-link active" href="Pservices.php">Services</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="contacts.php">Contacts</a>
+          <a class="nav-link active" href="Pcontacts.php">Contacts</a>
         </li>
-      
         <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
         <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo htmlspecialchars($name); ?></span>
         <img class="img-profile rounded-circle" src="img/pro.png" width="30" height="30">
     </a>
-    
     <ul class="dropdown-menu dropdown-menu-end">
         <li class="dropdown-item">Profile</li>
         <li>
@@ -275,40 +325,26 @@ if ($row) {
     </div>
   </div>
 </nav>
-<!-- about section -->
-<div class="about" id="about">
+<!-- contact -->
+<<section class="contact" id="contact">
   <div class="container">
-    <div class="heading">About <span>Us</span></div>
     <div class="row">
-      <div class="col-md-5">
-        <div class="card">
-          <img src="img/background.png">
-        </div>
-      </div>
       <div class="col-md-7">
-        <div>
-          <h6><strong>MISSION</strong></h6>
-          <i><p>Through the cooperation of people and leaders from various sectors, linking local, provincial, national, and other agencies. Providing adequate quality basic social services and appropriate education and training for people in the barangay.</p></i>
-        </div>
-        <div>
-          <h6><strong>VISION</strong></h6>
-          <i><p>A progressive Barangay where people are organized, cooperative, and unified; with significant development, sufficient income, food security, green and clean environment, and restored ecological balance. An intelligent and God-fearing population.</p></i>
-        </div>
-        <div>
-          <h6><strong>GOALS & OBJECTIVES</strong></h6>
-          <i><p>
-            1. Enhance sector capacities within the Barangay.<br>
-            2. Implement diverse livelihood projects for economic development.<br>
-            3. Restore and conserve the environment.<br>
-            4. Create a permanent Barangay site with community improvement facilities.<br>
-            5. Provide adequate and quality basic social services delivery system.
-          </p></i>
-        </div>
+       <div class="heading6"> Our <span>Location</span></div>
+      <img style="width: 600px;" src="img/caming.jpg" alt="">
+      </div>
+      <div class="col-md-5" id="col">
+        <h1>Contact <span>Us</span></h1>
+        <p><i class="fa-regular fas fa-envelope"></i> kabankalan.camingawan@gmail.com</p>
+        <p><i class="fa-solid fas fa-phone"></i> 09602016125</p>
+       <p>Location
+        We are located at:
+        Brgy.Camingawan,Kabankalan, City, Negros Occidental.</p>
       </div>
     </div>
   </div>
-</div>
-<!-- about section -->
+</section>
+<!-- contact -->
 <!-- footer -->
 <footer>
     <div class="con">
@@ -317,16 +353,16 @@ if ($row) {
             <ul class="list">
                 <li><a href="#">Email: kabankalan.camingawan@gmail.com</a></li>
                 <li><a href="#">Address: Brgy.Camingawan, Kabankalan, City, Negros Occidental</a></li>
-                <li><a href="#">Phone#: 09602016125</a></li>
+                <li><a href="#">Phone#:  09602016125</a></li>
             </ul>
         </div>
         <div class="footer-content">
             <h3>Quick Links</h3>
             <ul class="list">
-                <li><a href="index.php">Home</a></li>
-                <li><a href="aboutus.php">About</a></li>
-                <li><a href="services.php">Services</a></li>
-                <li><a href="contacts.php">Contact</a></li>
+                <li><a href="purokredent.php">Home</a></li>
+                <li><a href="Paboutus.php">About</a></li>
+                <li><a href="Pservices.php">Services</a></li>
+                <li><a href="Pcontacts.php">Contact</a></li>
             </ul>
         </div>
         <div class="footer-content">
@@ -336,9 +372,8 @@ if ($row) {
                 <li><a href="#"><i class="fab fa-google"></i></a></li>
             </ul>
         </div>
-    </div>
-    
+    </div>  
 </footer>
-<!--footer -->
+<!--footer -->   
 </body>
 </html>

@@ -1,3 +1,8 @@
+<?php
+include 'connection.php';
+include 'auth.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="img/logo2.png" rel="icon">
     <title>BARANGAY CAMINGAWAN</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -243,18 +249,41 @@ a:hover, .social-icons i:hover {
 </style>
 <body>
 <nav class="navbar sticky-navbar navbar-expand-lg navbar-dark bg-secondary py-1">
-  <div class="container">
+  <div class="container-fluid">
     <!-- Logo -->
-    <a class="navbar-brand mx-5" href="#">
+    <a class="navbar-brand ms-5" href="#">
       <img src="img/logo2.png" alt="Logo" width="80" height="70">
     </a>
-    <!-- Navbar Toggler -->
+    <!-- Toggler/collapsibe Button -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
+    <?php 
+// Fetch the current user's name and email based on user_id in the session
+$user_id = $_SESSION['user_id']; // Assuming user_id is stored in session after login
+$sql = "SELECT name, email FROM users WHERE id = :user_id LIMIT 1";
+$stmt = $conn->prepare($sql);
+$stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+$stmt->execute();
+
+// Fetch the user data
+$row = $stmt->fetch();
+
+// Check if a user is found
+if ($row) {
+    $name = $row['name'];
+    $email = $row['email'];
+} else {
+    // Handle case if no user is found (e.g., user is not logged in or invalid user)
+    $name = 'Guest';
+    $email = 'Not available';
+}
+?>
+
     <!-- Navbar Links -->
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-5">
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="upep.php">Home</a>
         </li>
@@ -267,11 +296,29 @@ a:hover, .social-icons i:hover {
         <li class="nav-item">
           <a class="nav-link active" href="contacts.php">Contacts</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link  text-white" href="logout.php" role="button">
-            <span>Logout</span>
-          </a>
+        <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo htmlspecialchars($name); ?></span>
+        <img class="img-profile rounded-circle" src="img/pro.png" width="30" height="30">
+    </a>
+    
+    <ul class="dropdown-menu dropdown-menu-end">
+        <li class="dropdown-item">Profile</li>
+        <li>
+            <a class="dropdown-item">
+                <i class="fas fa-envelope fa-sm fa-fw mr-2 text-gray-400"></i>
+                <u style="color: blue;"><?php echo htmlspecialchars($email); ?></u>
+            </a>
         </li>
+        <li><a class="dropdown-item" href="#">Another action</a></li>
+        <li><a class="dropdown-item" href="logout.php">
+            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+            <span>Logout</span>
+        </a></li>
+    </ul>
+</li>
+    </ul>
+</li>
       </ul>
     </div>
   </div>
@@ -310,7 +357,7 @@ a:hover, .social-icons i:hover {
         <div class="footer-content">
             <h3>Quick Links</h3>
             <ul class="list">
-                <li><a href="index.php">Home</a></li>
+                <li><a href="upep.php">Home</a></li>
                 <li><a href="aboutus.php">About</a></li>
                 <li><a href="services.php">Services</a></li>
                 <li><a href="contacts.php">Contact</a></li>

@@ -1,4 +1,4 @@
-<?php
+ <?php
     include 'connection.php';
 
     ////password///
@@ -977,7 +977,7 @@ if (isset($_POST['business_del'])) {
 
 
 
-///// mresident add /////
+///// resident add /////
 
 if (isset($_POST['PL_add'])) {
     try {
@@ -1036,13 +1036,13 @@ if (isset($_POST['PL_add'])) {
                 ':specify' => $specify,
                 ':detail' => $detail
             ]);
-            header('Location: purokredent.php?status=success');
+            header('Location: lead.php?status=success');
         } else {
-            header('Location: purokredent.php?status=exists');
+            header('Location: lead.php?status=exists');
         }
     } catch (PDOException $e) {
         error_log($e->getMessage());
-        header('Location: purokredent.php?status=error');
+        header('Location: lead.php?status=error');
     }
     exit();
 }
@@ -1103,30 +1103,12 @@ if (isset($_POST['PL_update'])) {
         $stmt->execute($data);
 
         
-        header('Location: purokredent.php?status=update_success');
+        header('Location: lead.php?status=update_success');
         exit();
     } catch (Exception $e) {
        
         error_log($e->getMessage());
-        header('Location: purokredent.php?status=update_error&message=' . urlencode($e->getMessage()));
-        exit();
-    }
-}
-
-
-// delete mresident
-
-if (isset($_POST['PL_del'])) {
-    try {
-        $p_id = $_POST['p_id'];
-        $sql = $conn->prepare("DELETE FROM `personal_info` WHERE `p_id` = :p_id");
-        $sql->bindParam(':p_id', $p_id, PDO::PARAM_INT);
-        $sql->execute();
-        header('Location: purokredent.php?status=delete_success');
-        exit();
-    } catch (Exception $e) {
-        error_log($e->getMessage());
-        header('Location: purokredent.php?status=delete_error&message=' . urlencode($e->getMessage()));
+        header('Location: lead.php?status=update_error&message=' . urlencode($e->getMessage()));
         exit();
     }
 }
